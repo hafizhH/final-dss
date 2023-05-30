@@ -26,6 +26,22 @@ export default function Root() {
     })
   }
 
+  const submitInput = () => {
+    fetch('/api/dataset', {
+      method: 'POST',
+      body: {
+        alternativeIds: alternatives.reduce((acc, alt) => {
+          if (alt.active)
+            acc.push(alt.id)
+        }, []),
+        criterias: [c1, c2, c3, c4, c5, c6, c7, c8]
+      }
+    }).then(async res => {
+      const { data } = await res.json()
+      setAlternatives(data)
+    })
+  }
+
   return (
     <div class='flex flex-col'>
       <div class='px-8 pt-8 flex-1 flex flex-row divide-x-2 divide-x-gray-400'>
@@ -98,7 +114,7 @@ export default function Root() {
                 (alternatives && alternatives.length > 0) ? alternatives.map((alt, index) => {
                   return (
                     <div class='my-2 px-4 py-4 h-32 flex flex-row border border-gray-300 rounded-lg shadow-xl'>
-                      <img src={alt.urlFoto ? alt.urlFoto : '#'} class='h-full w-[50%] mr-2' alt='Alternative Image' style={{ objectFit: 'cover' }}/>
+                      <img src={alt.urlFoto ? alt.urlFoto : '#'} class='h-full w-[40%] mr-4' alt='Alternative Image' style={{ objectFit: 'cover' }}/>
                       <div class='flex-1 flex flex-col'>
                         <div class='my-1 font-medium'>{ alt.nama }</div>
                         <div class='my-1 font-medium text-gray-500 text-sm'>{ alt.luas } m<sup>2</sup></div>
@@ -165,7 +181,7 @@ export default function Root() {
       </div>
       <div class='my-2'>
         <div class='ml-auto mr-8 w-fit'>
-          <button class='px-4 py-2 bg-blue-600 text-lg text-gray-100 rounded-md'>Submit</button>
+          <button onClick={() => submitInput() } class='px-4 py-2 bg-blue-600 text-lg text-gray-100 rounded-md'>Submit</button>
         </div>
       </div>
     </div>

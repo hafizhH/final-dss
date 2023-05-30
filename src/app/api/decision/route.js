@@ -5,31 +5,32 @@ import { csvStringToArray } from "@/app/utils"
 
 export async function POST(request) {
   
-  const { alternativeIndexes, criterias } = request.body
+  const { alternativeIds, criterias } = request.body
 
   const fileBuffer = fs.readFileSync(path.resolve('@/app/data/dataset.csv'))
   rawData = csvStringToArray(fileBuffer.toString('utf-8'))
-  alternatives = []
+  const alternatives = []
   
   for (const [index, row] of rawData.entries()) {
-    if (index == 0 || !alternativeIndexes.includes(index))
+    if (index == 0 || !alternativeIds.includes(row[0]))
       continue
-      alternatives.push({
-        nama: row[0],
-        luas: row[1],
-        harga: row[2],
-        lebar: row[3],
-        kota: row[4],
-        pendidikan: row[5],
-        kesehatan: row[6],
-        perbelanjaan: row[7],
-        kerja: row[8],
-        lokasi: {
-          lat: row[9],
-          long: row[10]
-        },
-        urlFoto: row[11],
-      })
+    alternatives.push({
+      id: row[0],
+      nama: row[1],
+      luas: row[2],
+      harga: row[3],
+      lebar: row[4],
+      kota: row[5],
+      pendidikan: row[6],
+      kesehatan: row[7],
+      perbelanjaan: row[8],
+      kerja: 0,
+      lokasi: {
+        lat: row[9],
+        long: row[10]
+      },
+      urlFoto: row[11],
+    })
   }
 
   const altSum = alternatives.reduce((acc, a) => {
@@ -66,5 +67,11 @@ export async function POST(request) {
 
   const normSAltProductSum = normSAlt.reduce((acc, a) => acc + a.product, 0)
 
-  return NextResponse.json(data)
+  const altRank = normSAlt.map((alt, index) => {
+    alt['rank'] = alt['product'] / normSAltProductSum
+    return alt
+  })
+
+  const altRankSorted = altRank.sort((a, b) => a.rank - b.rank)
+  return NextResponse.json({ data: altRankSorted })
 }

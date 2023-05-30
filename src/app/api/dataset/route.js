@@ -11,20 +11,21 @@ export async function GET() {
     if (index == 0)
       continue
     dataset.push({
-      nama: row[0],
-      luas: row[1],
-      harga: row[2],
-      lebar: row[3],
-      kota: row[4],
-      pendidikan: row[5],
-      kesehatan: row[6],
-      perbelanjaan: row[7],
+      id: row[0],
+      nama: row[1],
+      luas: row[2],
+      harga: row[3],
+      lebar: row[4],
+      kota: row[5],
+      pendidikan: row[6],
+      kesehatan: row[7],
+      perbelanjaan: row[8],
       kerja: 0,
       lokasi: {
-        lat: row[8],
-        long: row[9]
+        lat: row[9],
+        long: row[10]
       },
-      urlFoto: row[10],
+      urlFoto: row[11],
     })
   }
   return NextResponse.json({ data: dataset })
