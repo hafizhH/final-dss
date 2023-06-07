@@ -12,8 +12,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' />
+        <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAE3GLfP8CVF2eG8W34hy-O4Y1hlM0GVWw&libraries=places' />
+        {/* <script src="https://maps.googleapis.com/maps/api/js?key=YouApiKeyHere"></script> */}
+        {/* <script src="/dist/location-picker.min.js"></script> */}
       </head>
-      <body className={`h-screen`}>{children}</body>
+      <body>{children}</body>
     </html>
   )
 }
